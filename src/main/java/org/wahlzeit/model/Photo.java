@@ -48,6 +48,7 @@ public class Photo extends DataObject {
 	public static final String STATUS = "status";
 	public static final String IS_INVISIBLE = "isInvisible";
 	public static final String UPLOADED_ON = "uploadedOn";
+	public static final String LOCATION = "location";
 	
 	/**
 	 * 
@@ -103,7 +104,9 @@ public class Photo extends DataObject {
 	 * 
 	 */
 	protected long creationTime = System.currentTimeMillis();
-	
+
+	protected Location location = new Location(new Coordinate(Math.random(), Math.random(), Math.random()));
+
 	/**
 	 * 
 	 */
@@ -164,6 +167,17 @@ public class Photo extends DataObject {
 		creationTime = rset.getLong("creation_time");
 
 		maxPhotoSize = PhotoSize.getFromWidthHeight(width, height);
+
+		// Load coordinate
+		String locationStr = rset.getString("location");
+		if(locationStr.length() == 0)
+		{
+			location = null;
+		}
+		else
+		{
+			location = new Location(new Coordinate(locationStr));
+		}
 	}
 	
 	/**
@@ -183,7 +197,17 @@ public class Photo extends DataObject {
 		rset.updateInt("status", status.asInt());
 		rset.updateInt("praise_sum", praiseSum);
 		rset.updateInt("no_votes", noVotes);
-		rset.updateLong("creation_time", creationTime);		
+		rset.updateLong("creation_time", creationTime);
+
+		// Store location
+		String locationStr = null;
+
+		if(location != null)
+		{
+			locationStr = location.getCoordinate().asString();
+		}
+
+		rset.updateString("location", locationStr);
 	}
 
 	/**
@@ -476,6 +500,26 @@ public class Photo extends DataObject {
 	 */
 	public long getCreationTime() {
 		return creationTime;
+	}
+
+	/**
+	 *
+	 * @methodtype get
+	 */
+	public Location getLocation() {
+		return location;
+	}
+
+	/**
+	 *
+	 * @methodtype set
+	 */
+	public void setLocation(Location newLocation) {
+		if(newLocation == null)
+			ExceptionHelper.ThrowNullArgumentExceptionMessage("newLocation");
+
+		location = newLocation;
+		incWriteCount();
 	}
 	
 }

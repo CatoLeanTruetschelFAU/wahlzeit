@@ -33,17 +33,4 @@ public final class Location {
     {
         return fCoordinate == DEFAULT_COORDINATE;
     }
-
-    public void setCoordinate(Coordinate coordinate)
-    {
-        if(coordinate == null)
-            ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
-
-        init(DEFAULT_COORDINATE);
-    }
-
-    public void resetCoordinate()
-    {
-        init(DEFAULT_COORDINATE);
-    }
 }
