@@ -2,10 +2,16 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 public final class Coordinate {
     private double fX;
     private double fY;
     private double fZ;
+
+    private static final NumberFormat INVARIANT_FORMAT = NumberFormat.getInstance(Locale.US);
 
     public Coordinate() {
         this(0,0,0);
@@ -16,6 +22,28 @@ public final class Coordinate {
         fX = x;
         fY = y;
         fZ = z;
+    }
+
+    public Coordinate(String value)
+    {
+        if(value == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
+
+        String[] components = value.split("|");
+
+        if(components.length == 0)
+            return;
+
+        if(components.length != 3)
+            ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
+
+        try {
+            fX = INVARIANT_FORMAT.parse(components[0]).doubleValue();
+            fY = INVARIANT_FORMAT.parse(components[1]).doubleValue();
+            fZ = INVARIANT_FORMAT.parse(components[2]).doubleValue();
+        } catch(ParseException exc) {
+            ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
+        }
     }
 
     private void init(double x, double y, double z)
@@ -106,5 +134,9 @@ public final class Coordinate {
         Coordinate result = new Coordinate();
         result.init(fX, fY, z);
         return result;
+    }
+
+    public String asString() {
+        return INVARIANT_FORMAT.format(fX) + "|" + INVARIANT_FORMAT.format(fY) + "|" + INVARIANT_FORMAT.format(fZ);
     }
 }
