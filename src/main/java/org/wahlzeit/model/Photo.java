@@ -130,6 +130,8 @@ public class Photo extends DataObject {
 	 * @methodtype constructor
 	 */
 	public Photo(ResultSet rset) throws SQLException {
+
+		// Calling a virtual method in a constructor...Seriously
 		readFrom(rset);
 	}
 
