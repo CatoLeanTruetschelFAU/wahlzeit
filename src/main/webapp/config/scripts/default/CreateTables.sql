@@ -30,7 +30,10 @@ CREATE TABLE photos (
 	praise_sum integer,
 	no_votes integer,
 	creation_time bigint,
-	location text
+	location text,
+	restaurant_name text,
+	restaurant_offered_food_type text,
+	restaurant_offers_vegetarian_food boolean
 );
 
 CREATE TABLE tags (
