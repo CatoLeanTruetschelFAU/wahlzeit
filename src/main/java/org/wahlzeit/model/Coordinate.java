@@ -29,7 +29,7 @@ public final class Coordinate {
         if(value == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
 
-        String[] components = value.split("|");
+        String[] components = value.split(" ");
 
         if(components.length == 0)
             return;
@@ -137,6 +137,6 @@ public final class Coordinate {
     }
 
     public String asString() {
-        return INVARIANT_FORMAT.format(fX) + "|" + INVARIANT_FORMAT.format(fY) + "|" + INVARIANT_FORMAT.format(fZ);
+        return INVARIANT_FORMAT.format(fX) + " " + INVARIANT_FORMAT.format(fY) + " " + INVARIANT_FORMAT.format(fZ);
     }
 }
