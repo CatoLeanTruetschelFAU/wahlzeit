@@ -178,7 +178,7 @@ public class Photo extends DataObject {
 		}
 		else
 		{
-			location = new Location(new CartesianCoordinate(locationStr));
+			location = Location.parse(locationStr);
 		}
 	}
 	
@@ -206,7 +206,7 @@ public class Photo extends DataObject {
 
 		if(location != null)
 		{
-			locationStr = location.getCoordinate().asString();
+			locationStr = location.asString();
 		}
 
 		rset.updateString("location", locationStr);

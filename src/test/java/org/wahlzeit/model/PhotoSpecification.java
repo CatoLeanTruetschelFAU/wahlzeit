@@ -25,7 +25,7 @@ public abstract class PhotoSpecification {
     protected static final int EXPECTED_PRAISE_SUM = 10;
     protected static final int EXPECTED_NO_VOTES = 5;
     protected static final long EXPECTED_CREATION_TIME = 400;
-    protected static final String EXPECTED_LOCATION = new CartesianCoordinate(1, 2, 3).asString();
+    protected static final String EXPECTED_LOCATION = new Location(new CartesianCoordinate(1, 2, 3)).asString();
 
 
     protected abstract Photo init();
@@ -81,7 +81,7 @@ public abstract class PhotoSpecification {
     public void InitWithResultSetTest() throws SQLException {
         // Arrange
         ResultSet rset = buildResultSet();
-        CartesianCoordinate expectedCoordinate = new CartesianCoordinate(EXPECTED_LOCATION);
+        Coordinate expectedCoordinate = Location.parse(EXPECTED_LOCATION).getCoordinate();
 
         // Act
         Photo subject = init(rset);
@@ -98,10 +98,8 @@ public abstract class PhotoSpecification {
         Assert.assertEquals(EXPECTED_HEIGHT, subject.getHeight());
         Assert.assertEquals(EXPECTED_TAGS, subject.getTags().asString());
         Assert.assertEquals(EXPECTED_STATUS, subject.getStatus().asInt());
-        Assert.assertEquals(EXPECTED_PRAISE_SUM / EXPECTED_NO_VOTES, subject.getPraise(), DEFAULT_TOLERANCE);
+        Assert.assertEquals((float)EXPECTED_PRAISE_SUM / EXPECTED_NO_VOTES, subject.getPraise(), DEFAULT_TOLERANCE);
         Assert.assertEquals(EXPECTED_CREATION_TIME, subject.getCreationTime());
-        Assert.assertEquals(expectedCoordinate.getX(), subject.getLocation().getCoordinate().getX(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(expectedCoordinate.getY(), subject.getLocation().getCoordinate().getY(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(expectedCoordinate.getZ(), subject.getLocation().getCoordinate().getZ(), DEFAULT_TOLERANCE);
+        Assert.assertEquals(expectedCoordinate, subject.getLocation().getCoordinate());
     }
 }

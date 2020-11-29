@@ -6,4 +6,6 @@ public interface Coordinate {
     SphericCoordinate asSphericCoordinate();
     double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException;
     boolean isEqual(Coordinate coordinate);
+
+    String asString();
 }

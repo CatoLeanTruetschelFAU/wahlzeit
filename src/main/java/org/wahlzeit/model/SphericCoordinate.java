@@ -2,11 +2,39 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 public final class SphericCoordinate implements Coordinate {
 
-    private final double fPhi; // = Longitude e [0; 2PI]
-    private final double fTheta; // = Latitude e [0; PI]
-    private final double fRadius; // = Elevation >= 0
+    private double fPhi; // = Longitude e [0; 2PI]
+    private double fTheta; // = Latitude e [0; PI]
+    private double fRadius; // = Elevation >= 0
+
+    private static final NumberFormat INVARIANT_FORMAT = NumberFormat.getInstance(Locale.US);
+
+    public SphericCoordinate(String value)
+    {
+        if(value == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
+
+        String[] components = value.split(" ");
+
+        if(components.length == 0)
+            return;
+
+        if(components.length != 3)
+            ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
+
+        try {
+            fPhi = INVARIANT_FORMAT.parse(components[0]).doubleValue();
+            fTheta = INVARIANT_FORMAT.parse(components[1]).doubleValue();
+            fRadius = INVARIANT_FORMAT.parse(components[2]).doubleValue();
+        } catch(ParseException exc) {
+            ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
+        }
+    }
 
     public SphericCoordinate(double phi, double theta, double radius) throws IllegalArgumentException {
         checkValues(phi,theta, radius);
@@ -89,6 +117,10 @@ public final class SphericCoordinate implements Coordinate {
     @Override
     public int hashCode() {
         return asCartesionCoordinate().hashCode();
+    }
+
+    public String asString() {
+        return INVARIANT_FORMAT.format(fPhi) + " " + INVARIANT_FORMAT.format(fTheta) + " " + INVARIANT_FORMAT.format(fRadius);
     }
 
     @Override

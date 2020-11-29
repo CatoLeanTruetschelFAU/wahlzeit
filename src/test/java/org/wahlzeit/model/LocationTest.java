@@ -16,9 +16,7 @@ public final class LocationTest {
 
         // Assert
         Assert.assertTrue(subject.isDefault());
-        Assert.assertEquals(0, subject.getCoordinate().getX(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(0, subject.getCoordinate().getY(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(0, subject.getCoordinate().getZ(), DEFAULT_TOLERANCE);
+        Assert.assertEquals(new CartesianCoordinate(), subject.getCoordinate().asCartesionCoordinate());
     }
 
     @Test
@@ -33,8 +31,8 @@ public final class LocationTest {
 
         // Assert
         Assert.assertFalse(subject.isDefault());
-        Assert.assertEquals(expectedX, subject.getCoordinate().getX(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(expectedY, subject.getCoordinate().getY(), DEFAULT_TOLERANCE);
-        Assert.assertEquals(expectedZ, subject.getCoordinate().getZ(), DEFAULT_TOLERANCE);
+        Assert.assertEquals(
+                new CartesianCoordinate(expectedX, expectedY, expectedZ),
+                subject.getCoordinate().asCartesionCoordinate());
     }
 }
