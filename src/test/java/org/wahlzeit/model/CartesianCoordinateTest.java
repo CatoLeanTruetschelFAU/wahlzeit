@@ -101,4 +101,28 @@ public class CartesianCoordinateTest {
         // Assert
         Assert.assertEquals(expectedDistance, distance, DEFAULT_TOLERANCE);
     }
+
+    @Test
+    public void testSpericRoundtrip() {
+        // Arrange
+        CartesianCoordinate expected = new CartesianCoordinate(1, 1, 1);
+
+        // Act
+        CartesianCoordinate coordinate = expected.asSphericCoordinate().asCartesianCoordinate();
+
+        // Assert
+        Assert.assertEquals(expected, coordinate);
+    }
+
+    @Test
+    public void testSpericEqualsOriginal() {
+        // Arrange
+        CartesianCoordinate expected = new CartesianCoordinate(1, 1, 1);
+
+        // Act
+        SphericCoordinate coordinate = expected.asSphericCoordinate();
+
+        // Assert
+        Assert.assertEquals(expected, coordinate);
+    }
 }
