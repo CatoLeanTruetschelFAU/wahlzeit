@@ -6,25 +6,25 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-public final class Coordinate {
+public final class CartesianCoordinate {
     private double fX;
     private double fY;
     private double fZ;
 
     private static final NumberFormat INVARIANT_FORMAT = NumberFormat.getInstance(Locale.US);
 
-    public Coordinate() {
+    public CartesianCoordinate() {
         this(0,0,0);
     }
 
-    public Coordinate(double x, double y, double z) {
+    public CartesianCoordinate(double x, double y, double z) {
         checkValues(x,y, z);
         fX = x;
         fY = y;
         fZ = z;
     }
 
-    public Coordinate(String value)
+    public CartesianCoordinate(String value)
     {
         if(value == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
@@ -79,7 +79,7 @@ public final class Coordinate {
         return fZ;
     }
 
-    public double getDistance(Coordinate other) throws IllegalArgumentException
+    public double getDistance(CartesianCoordinate other) throws IllegalArgumentException
     {
         if(other == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("other");
@@ -94,12 +94,12 @@ public final class Coordinate {
         return Math.sqrt(distX * distX + distY * distY + distZ * distZ);
     }
 
-    public boolean isEqual(Coordinate other)
+    public boolean isEqual(CartesianCoordinate other)
     {
         return isEqual(other, 0.000001);
     }
 
-    public boolean isEqual(Coordinate other, double tolerance)
+    public boolean isEqual(CartesianCoordinate other, double tolerance)
     {
         if(other == this)
             return true;
@@ -109,29 +109,29 @@ public final class Coordinate {
         return distance <= tolerance;
     }
 
-    public Coordinate withX(double x)
+    public CartesianCoordinate withX(double x)
     {
         checkValueNotNanNotInfinity("x", x);
 
-       Coordinate result = new Coordinate();
+       CartesianCoordinate result = new CartesianCoordinate();
        result.init(x, fY, fZ);
        return result;
     }
 
-    public Coordinate withY(double y)
+    public CartesianCoordinate withY(double y)
     {
         checkValueNotNanNotInfinity("y", y);
 
-        Coordinate result = new Coordinate();
+        CartesianCoordinate result = new CartesianCoordinate();
         result.init(fX, y, fZ);
         return result;
     }
 
-    public Coordinate withZ(double z)
+    public CartesianCoordinate withZ(double z)
     {
         checkValueNotNanNotInfinity("z", z);
 
-        Coordinate result = new Coordinate();
+        CartesianCoordinate result = new CartesianCoordinate();
         result.init(fX, fY, z);
         return result;
     }

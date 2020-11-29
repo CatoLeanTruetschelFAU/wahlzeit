@@ -3,15 +3,15 @@ package org.wahlzeit.model;
 import org.wahlzeit.utils.ExceptionHelper;
 
 public final class Location {
-    private static final Coordinate DEFAULT_COORDINATE = new Coordinate();
+    private static final CartesianCoordinate DEFAULT_COORDINATE = new CartesianCoordinate();
 
-    private Coordinate fCoordinate;
+    private CartesianCoordinate fCoordinate;
 
     public Location() {
         init(DEFAULT_COORDINATE);
     }
 
-    public Location(Coordinate coordinate)
+    public Location(CartesianCoordinate coordinate)
     {
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
@@ -19,12 +19,12 @@ public final class Location {
         init(coordinate);
     }
 
-    private void init(Coordinate coordinate)
+    private void init(CartesianCoordinate coordinate)
     {
         fCoordinate = coordinate;
     }
 
-    public Coordinate getCoordinate()
+    public CartesianCoordinate getCoordinate()
     {
         return fCoordinate;
     }

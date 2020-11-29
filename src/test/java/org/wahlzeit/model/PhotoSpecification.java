@@ -25,7 +25,7 @@ public abstract class PhotoSpecification {
     protected static final int EXPECTED_PRAISE_SUM = 10;
     protected static final int EXPECTED_NO_VOTES = 5;
     protected static final long EXPECTED_CREATION_TIME = 400;
-    protected static final String EXPECTED_LOCATION = new Coordinate(1, 2, 3).asString();
+    protected static final String EXPECTED_LOCATION = new CartesianCoordinate(1, 2, 3).asString();
 
 
     protected abstract Photo init();
@@ -81,7 +81,7 @@ public abstract class PhotoSpecification {
     public void InitWithResultSetTest() throws SQLException {
         // Arrange
         ResultSet rset = buildResultSet();
-        Coordinate expectedCoordinate = new Coordinate(EXPECTED_LOCATION);
+        CartesianCoordinate expectedCoordinate = new CartesianCoordinate(EXPECTED_LOCATION);
 
         // Act
         Photo subject = init(rset);

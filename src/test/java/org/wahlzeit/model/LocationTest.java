@@ -29,7 +29,7 @@ public final class LocationTest {
         double expectedZ = 234.567;
 
         // Act
-        Location subject = new Location(new Coordinate(expectedX, expectedY, expectedZ));
+        Location subject = new Location(new CartesianCoordinate(expectedX, expectedY, expectedZ));
 
         // Assert
         Assert.assertFalse(subject.isDefault());
