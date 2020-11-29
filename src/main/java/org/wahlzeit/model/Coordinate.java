@@ -1,7 +1,7 @@
 package org.wahlzeit.model;
 
 public interface Coordinate {
-    CartesianCoordinate asCartesionCoordinate();
+    CartesianCoordinate asCartesianCoordinate();
     double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException;
     SphericCoordinate asSphericCoordinate();
     double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException;

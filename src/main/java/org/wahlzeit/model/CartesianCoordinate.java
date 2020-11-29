@@ -82,7 +82,7 @@ public final class CartesianCoordinate implements Coordinate {
 
     public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException
     {
-        return getDistance(coordinate.asCartesionCoordinate());
+        return getDistance(coordinate.asCartesianCoordinate());
     }
 
     public double getDistance(CartesianCoordinate other) throws IllegalArgumentException
@@ -107,7 +107,7 @@ public final class CartesianCoordinate implements Coordinate {
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        return isEqual(coordinate.asCartesionCoordinate(), 0.000001);
+        return isEqual(coordinate.asCartesianCoordinate(), 0.000001);
     }
 
     public boolean isEqual(CartesianCoordinate other)
@@ -166,7 +166,7 @@ public final class CartesianCoordinate implements Coordinate {
         return INVARIANT_FORMAT.format(fX) + " " + INVARIANT_FORMAT.format(fY) + " " + INVARIANT_FORMAT.format(fZ);
     }
 
-    public CartesianCoordinate asCartesionCoordinate() { return this; }
+    public CartesianCoordinate asCartesianCoordinate() { return this; }
 
     public SphericCoordinate asSphericCoordinate() {
         double phi = Math.atan(fY / fX);

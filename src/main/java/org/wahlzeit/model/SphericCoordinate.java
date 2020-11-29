@@ -79,7 +79,7 @@ public final class SphericCoordinate implements Coordinate {
 
     @Override
     public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException {
-       return coordinate.asCartesionCoordinate().getCartesianDistance(coordinate);
+       return coordinate.asCartesianCoordinate().getCartesianDistance(coordinate);
     }
 
     @Override
@@ -106,7 +106,7 @@ public final class SphericCoordinate implements Coordinate {
 
         // Forward call to cartesian coordinate as our normalized coordinate system to ensure
         // the commutative of equality.
-        return asCartesionCoordinate().isEqual(coordinate);
+        return asCartesianCoordinate().isEqual(coordinate);
     }
 
     @Override
@@ -116,7 +116,7 @@ public final class SphericCoordinate implements Coordinate {
 
     @Override
     public int hashCode() {
-        return asCartesionCoordinate().hashCode();
+        return asCartesianCoordinate().hashCode();
     }
 
     public String asString() {
@@ -129,7 +129,7 @@ public final class SphericCoordinate implements Coordinate {
     }
 
     @Override
-    public CartesianCoordinate asCartesionCoordinate() {
+    public CartesianCoordinate asCartesianCoordinate() {
         double sinTheta = Math.sin(fTheta);
 
         double x = fRadius * sinTheta * Math.cos(fPhi);
