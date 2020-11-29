@@ -5,8 +5,9 @@ import org.wahlzeit.utils.ExceptionHelper;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Objects;
 
-public final class CartesianCoordinate {
+public final class CartesianCoordinate implements Coordinate {
     private double fX;
     private double fY;
     private double fZ;
@@ -79,6 +80,11 @@ public final class CartesianCoordinate {
         return fZ;
     }
 
+    public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException
+    {
+        return getDistance(coordinate.asCartesionCoordinate());
+    }
+
     public double getDistance(CartesianCoordinate other) throws IllegalArgumentException
     {
         if(other == null)
@@ -94,6 +100,16 @@ public final class CartesianCoordinate {
         return Math.sqrt(distX * distX + distY * distY + distZ * distZ);
     }
 
+    @Override
+    public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
+        return 0;
+    }
+
+    @Override
+    public boolean isEqual(Coordinate coordinate) {
+        return isEqual(coordinate.asCartesionCoordinate(), 0.000001);
+    }
+
     public boolean isEqual(CartesianCoordinate other)
     {
         return isEqual(other, 0.000001);
@@ -107,6 +123,16 @@ public final class CartesianCoordinate {
         double distance = getDistance(other);
 
         return distance <= tolerance;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof Coordinate && isEqual((Coordinate)other);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fX, fY, fZ);
     }
 
     public CartesianCoordinate withX(double x)
@@ -138,5 +164,14 @@ public final class CartesianCoordinate {
 
     public String asString() {
         return INVARIANT_FORMAT.format(fX) + " " + INVARIANT_FORMAT.format(fY) + " " + INVARIANT_FORMAT.format(fZ);
+    }
+
+    public CartesianCoordinate asCartesionCoordinate() { return this; }
+
+    public SphericCoordinate asSphericCoordinate() {
+        double phi = Math.atan(fY / fX);
+        double radius = Math.sqrt(fX * fX + fY * fY + fZ * fZ);
+        double theta = Math.acos(fZ / radius);
+        return new SphericCoordinate(phi, theta, radius);
     }
 }
