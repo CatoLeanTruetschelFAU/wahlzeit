@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.util.Locale;
 import java.util.Objects;
 
-public final class CartesianCoordinate implements Coordinate {
+public final class CartesianCoordinate extends AbstractCoordinate {
 
     public static final CartesianCoordinate ORIGIN = new CartesianCoordinate();
 
@@ -186,3 +186,4 @@ public final class CartesianCoordinate implements Coordinate {
         return new SphericCoordinate(phi, theta, radius);
     }
 }
+

@@ -6,7 +6,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-public final class SphericCoordinate implements Coordinate {
+public final class SphericCoordinate extends AbstractCoordinate {
 
     public static final SphericCoordinate ORIGIN = new SphericCoordinate(0,0,0);
 
