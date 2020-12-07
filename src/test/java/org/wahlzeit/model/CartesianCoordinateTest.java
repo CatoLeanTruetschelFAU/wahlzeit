@@ -125,4 +125,28 @@ public class CartesianCoordinateTest {
         // Assert
         Assert.assertEquals(expected, coordinate);
     }
+
+    @Test
+    public void testOriginSpericToCartesian() {
+        // Arrange
+        SphericCoordinate spheric = SphericCoordinate.ORIGIN;
+
+        // Act
+        CartesianCoordinate cartesian = spheric.asCartesianCoordinate();
+
+        // Assert
+        Assert.assertEquals(spheric, cartesian);
+    }
+
+    @Test
+    public void testOriginCartesianToSperic() {
+        // Arrange
+        CartesianCoordinate cartesian = CartesianCoordinate.ORIGIN;
+
+        // Act
+        SphericCoordinate spheric =  cartesian.asSphericCoordinate();
+
+        // Assert
+        Assert.assertEquals(cartesian, spheric);
+    }
 }

@@ -8,6 +8,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public final class CartesianCoordinate implements Coordinate {
+
+    public static final CartesianCoordinate ORIGIN = new CartesianCoordinate();
+
     private double fX;
     private double fY;
     private double fZ;
@@ -168,10 +171,18 @@ public final class CartesianCoordinate implements Coordinate {
 
     public CartesianCoordinate asCartesianCoordinate() { return this; }
 
+    private static final double EPSILON = Double.longBitsToDouble(971L << 52);
+
     public SphericCoordinate asSphericCoordinate() {
-        double phi = Math.atan(fY / fX);
         double radius = Math.sqrt(fX * fX + fY * fY + fZ * fZ);
-        double theta = Math.acos(fZ / radius);
+        assert radius >= 0;
+        // theta will become NaN if radius is exactly 0, but it is a trigonometric function that is only approximated,
+        // so the total error will be very small, if we divide through radius + epsilon instead of radius.
+        // This will guarantee that the fraction will not have a result of infinity (or NaN if fz = 0).
+        double theta = Math.acos(fZ / (radius + EPSILON));
+
+        double phi = Math.signum(fX) * Math.atan(fY / (Math.abs(fX) + EPSILON));
+
         return new SphericCoordinate(phi, theta, radius);
     }
 }

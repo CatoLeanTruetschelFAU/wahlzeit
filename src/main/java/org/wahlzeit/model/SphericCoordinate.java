@@ -8,6 +8,8 @@ import java.util.Locale;
 
 public final class SphericCoordinate implements Coordinate {
 
+    public static final SphericCoordinate ORIGIN = new SphericCoordinate(0,0,0);
+
     private double fPhi; // = Longitude e [0; 2PI]
     private double fTheta; // = Latitude e [0; PI]
     private double fRadius; // = Elevation >= 0
