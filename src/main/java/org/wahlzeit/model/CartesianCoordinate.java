@@ -93,24 +93,6 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return fZ;
     }
 
-    // TODO: Move to base type?
-    public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException {
-        // Assert pre-conditions and invariants
-        assertInvariants();
-
-        double result = getCartesianDistanceCore(coordinate);
-
-        // Assert post-conditions and invariants
-        assert result >= 0;
-        assertInvariants();
-
-        return result;
-    }
-
-    private double getCartesianDistanceCore(Coordinate coordinate) {
-        return getDistanceCore(coordinate.asCartesianCoordinate());
-    }
-
     public double getDistance(CartesianCoordinate other) throws IllegalArgumentException {
         // Assert pre-conditions and invariants
         assertInvariants();
@@ -136,12 +118,6 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         double distZ = other.fZ - fZ;
 
         return Math.sqrt(distX * distX + distY * distY + distZ * distZ);
-    }
-
-    // TODO: Move to base type?
-    @Override
-    public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
-        return asSphericCoordinate().getCentralAngle(coordinate);
     }
 
     @Override
@@ -217,7 +193,8 @@ public final class CartesianCoordinate extends AbstractCoordinate {
 
         // Assert post-conditions and invariants
         assertInvariants();
-        assert result != null;
+        // assert result != null; // The compiler actually marks this as error, as it can statically verify that
+                                  // result is always non-null.
 
         return result;
     }
