@@ -35,9 +35,21 @@ public abstract class AbstractCoordinate implements Coordinate {
         return asCartesianCoordinate().getCartesianDistance(coordinate.asCartesianCoordinate());
     }
 
-    @Override
     public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
-        return asSphericCoordinate().getCentralAngle(coordinate);
+        // Assert post-conditions and invariants
+        if(coordinate == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
+
+        double result = getCentralAngleCore(coordinate);
+
+        // Assert post-conditions and invariants
+        assert result >= 0 && result <= Math.PI;
+
+        return result;
+    }
+
+    public double getCentralAngleCore(Coordinate coordinate) throws IllegalArgumentException {
+        return asSphericCoordinate().getCentralAngle(coordinate.asSphericCoordinate());
     }
 
     public abstract String asString();

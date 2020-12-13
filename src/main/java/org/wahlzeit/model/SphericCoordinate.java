@@ -2,6 +2,7 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
 
+import java.nio.DoubleBuffer;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -36,6 +37,8 @@ public final class SphericCoordinate extends AbstractCoordinate {
         } catch(ParseException exc) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
         }
+
+        assertInvariants();
     }
 
     public SphericCoordinate(double phi, double theta, double radius) throws IllegalArgumentException {
@@ -44,6 +47,8 @@ public final class SphericCoordinate extends AbstractCoordinate {
         fPhi = phi;
         fTheta = theta;
         fRadius = radius;
+
+        assertInvariants();
     }
 
     private static void checkValues(double phi, double theta, double radius) throws IllegalArgumentException {
@@ -79,23 +84,34 @@ public final class SphericCoordinate extends AbstractCoordinate {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage(argumentName, "infinity");
     }
 
-    @Override
-    public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException {
-       return coordinate.asCartesianCoordinate().getCartesianDistance(coordinate);
-    }
+    private void assertInvariants() {
+        assert !Double.isNaN(fPhi) && !Double.isInfinite(fPhi);
+        assert !Double.isNaN(fTheta) && !Double.isInfinite(fTheta);
+        assert !Double.isNaN(fRadius) && !Double.isInfinite(fRadius);
 
-    @Override
-    public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
-        if(coordinate == null)
-            ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
-
-        return getCentralAngle(coordinate.asSphericCoordinate());
+        assert fPhi >= 0;
+        assert fPhi <= 2 * Math.PI;
+        assert fTheta >= 0;
+        assert fTheta <= Math.PI;
+        assert fRadius >= 0;
     }
 
     public double getCentralAngle(SphericCoordinate coordinate) throws IllegalArgumentException {
+        // Assert post-conditions and invariants
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
+        assertInvariants();
 
+        double result = getCentralAngleCore(coordinate);
+
+        // Assert post-conditions and invariants
+        assert result >= 0 && result <= Math.PI;
+        assertInvariants();
+
+        return result;
+    }
+
+    private double getCentralAngleCore(SphericCoordinate coordinate) {
         double cosAbsPhiDiff = Math.abs(fPhi - coordinate.fPhi);
         double productSinTheta = Math.sin(fTheta) * Math.sin(coordinate.fTheta);
         double productCosThea = Math.cos(fTheta) * Math.cos(coordinate.fTheta);
@@ -122,6 +138,20 @@ public final class SphericCoordinate extends AbstractCoordinate {
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
+        // Assert post-conditions and invariants
+        assertInvariants();
+
+        CartesianCoordinate result = asCartesianCoordinateCore();
+
+        // Assert post-conditions and invariants
+        //assert result != null; // The compiler actually marks this as error, as it can statically verify that
+        //                       // result is always non-null.
+        assertInvariants();
+
+        return result;
+    }
+
+    private CartesianCoordinate asCartesianCoordinateCore() {
         double sinTheta = Math.sin(fTheta);
 
         double x = fRadius * sinTheta * Math.cos(fPhi);
