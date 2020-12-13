@@ -111,16 +111,6 @@ public final class SphericCoordinate extends AbstractCoordinate {
         return asCartesianCoordinate().isEqual(coordinate);
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof Coordinate && isEqual((Coordinate)other);
-    }
-
-    @Override
-    public int hashCode() {
-        return asCartesianCoordinate().hashCode();
-    }
-
     public String asString() {
         return INVARIANT_FORMAT.format(fPhi) + " " + INVARIANT_FORMAT.format(fTheta) + " " + INVARIANT_FORMAT.format(fRadius);
     }

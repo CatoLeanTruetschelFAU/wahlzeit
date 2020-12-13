@@ -128,13 +128,7 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return distance <= tolerance;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof Coordinate && isEqual((Coordinate)other);
-    }
-
-    @Override
-    public int hashCode() {
+    int internalHashCode() {
         return Objects.hash(fX, fY, fZ);
     }
 
