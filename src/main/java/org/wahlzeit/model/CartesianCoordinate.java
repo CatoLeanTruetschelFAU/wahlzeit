@@ -19,13 +19,15 @@ public final class CartesianCoordinate extends AbstractCoordinate {
 
     public CartesianCoordinate() {
         this(0,0,0);
+
+        assertInvariants();
     }
 
     public CartesianCoordinate(double x, double y, double z) {
         checkValues(x,y, z);
-        fX = x;
-        fY = y;
-        fZ = z;
+        init(fX, fY, fZ);
+
+        assertInvariants();
     }
 
     public CartesianCoordinate(String value)
@@ -48,6 +50,8 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         } catch(ParseException exc) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
         }
+
+        assertInvariants();
     }
 
     private void init(double x, double y, double z)
@@ -71,6 +75,12 @@ public final class CartesianCoordinate extends AbstractCoordinate {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage(argumentName, "infinity");
     }
 
+    private void assertInvariants() {
+        assert !Double.isNaN(fX) && !Double.isInfinite(fX);
+        assert !Double.isNaN(fY) && !Double.isInfinite(fY);
+        assert !Double.isNaN(fZ) && !Double.isInfinite(fZ);
+    }
+
     public double getX(){
         return fX;
     }
@@ -83,16 +93,41 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return fZ;
     }
 
-    public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException
-    {
-        return getDistance(coordinate.asCartesianCoordinate());
+    // TODO: Move to base type?
+    public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException {
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
+        double result = getCartesianDistanceCore(coordinate);
+
+        // Assert post-conditions and invariants
+        assert result >= 0;
+        assertInvariants();
+
+        return result;
     }
 
-    public double getDistance(CartesianCoordinate other) throws IllegalArgumentException
-    {
+    private double getCartesianDistanceCore(Coordinate coordinate) {
+        return getDistanceCore(coordinate.asCartesianCoordinate());
+    }
+
+    public double getDistance(CartesianCoordinate other) throws IllegalArgumentException {
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
         if(other == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("other");
 
+        double result = getDistanceCore(other);
+
+        // Assert post-conditions and invariants
+        assert result >= 0;
+        assertInvariants();
+
+        return result;
+    }
+
+    private double getDistanceCore(CartesianCoordinate other) {
         if(other == this)
             return 0;
 
@@ -103,23 +138,57 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return Math.sqrt(distX * distX + distY * distY + distZ * distZ);
     }
 
+    // TODO: Move to base type?
     @Override
     public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
-        return 0;
+        return asSphericCoordinate().getCentralAngle(coordinate);
     }
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        return isEqual(coordinate.asCartesianCoordinate(), 0.000001);
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
+        boolean result = isEqualCore(coordinate, 0.000001);
+
+        // Assert post-conditions and invariants
+        assertInvariants();
+
+        return result;
     }
 
-    public boolean isEqual(CartesianCoordinate other)
-    {
-        return isEqual(other, 0.000001);
+    public boolean isEqual(CartesianCoordinate other) {
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
+        boolean result = isEqualCore(other, 0.000001);
+
+        // Assert post-conditions and invariants
+        assertInvariants();
+
+        return result;
     }
 
-    public boolean isEqual(CartesianCoordinate other, double tolerance)
-    {
+    public boolean isEqual(CartesianCoordinate other, double tolerance) {
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
+        if(tolerance < 0)
+            ExceptionHelper.ThrowIllegalArgumentExceptionMessage("tolerance", "a negative value");
+
+        boolean result = isEqualCore(other, tolerance);
+
+        // Assert post-conditions and invariants
+        assertInvariants();
+
+        return result;
+    }
+
+    private boolean isEqualCore(Coordinate other, double tolerance) {
+        return isEqualCore(other.asCartesianCoordinate(), tolerance);
+    }
+
+    private boolean isEqualCore(CartesianCoordinate other, double tolerance) {
         if(other == this)
             return true;
 
@@ -132,33 +201,6 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return Objects.hash(fX, fY, fZ);
     }
 
-    public CartesianCoordinate withX(double x)
-    {
-        checkValueNotNanNotInfinity("x", x);
-
-       CartesianCoordinate result = new CartesianCoordinate();
-       result.init(x, fY, fZ);
-       return result;
-    }
-
-    public CartesianCoordinate withY(double y)
-    {
-        checkValueNotNanNotInfinity("y", y);
-
-        CartesianCoordinate result = new CartesianCoordinate();
-        result.init(fX, y, fZ);
-        return result;
-    }
-
-    public CartesianCoordinate withZ(double z)
-    {
-        checkValueNotNanNotInfinity("z", z);
-
-        CartesianCoordinate result = new CartesianCoordinate();
-        result.init(fX, fY, z);
-        return result;
-    }
-
     public String asString() {
         return INVARIANT_FORMAT.format(fX) + " " + INVARIANT_FORMAT.format(fY) + " " + INVARIANT_FORMAT.format(fZ);
     }
@@ -168,13 +210,25 @@ public final class CartesianCoordinate extends AbstractCoordinate {
     private static final double EPSILON = Double.longBitsToDouble(971L << 52);
 
     public SphericCoordinate asSphericCoordinate() {
+        // Assert pre-conditions and invariants
+        assertInvariants();
+
+        SphericCoordinate result = asSphericCoordinateCore();
+
+        // Assert post-conditions and invariants
+        assertInvariants();
+        assert result != null;
+
+        return result;
+    }
+
+    public SphericCoordinate asSphericCoordinateCore() {
         double radius = Math.sqrt(fX * fX + fY * fY + fZ * fZ);
         assert radius >= 0;
         // theta will become NaN if radius is exactly 0, but it is a trigonometric function that is only approximated,
         // so the total error will be very small, if we divide through radius + epsilon instead of radius.
         // This will guarantee that the fraction will not have a result of infinity (or NaN if fz = 0).
         double theta = Math.acos(fZ / (radius + EPSILON));
-
         double phi = Math.signum(fX) * Math.atan(fY / (Math.abs(fX) + EPSILON));
 
         return new SphericCoordinate(phi, theta, radius);
