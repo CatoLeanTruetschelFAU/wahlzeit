@@ -25,7 +25,7 @@ public final class CartesianCoordinate extends AbstractCoordinate {
 
     public CartesianCoordinate(double x, double y, double z) {
         checkValues(x,y, z);
-        init(fX, fY, fZ);
+        init(x, y, z);
 
         assertInvariants();
     }
