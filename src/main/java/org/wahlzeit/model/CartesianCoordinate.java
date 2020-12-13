@@ -120,19 +120,6 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         return Math.sqrt(distX * distX + distY * distY + distZ * distZ);
     }
 
-    @Override
-    public boolean isEqual(Coordinate coordinate) {
-        // Assert pre-conditions and invariants
-        assertInvariants();
-
-        boolean result = isEqualCore(coordinate, 0.000001);
-
-        // Assert post-conditions and invariants
-        assertInvariants();
-
-        return result;
-    }
-
     public boolean isEqual(CartesianCoordinate other) {
         // Assert pre-conditions and invariants
         assertInvariants();
@@ -158,10 +145,6 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         assertInvariants();
 
         return result;
-    }
-
-    private boolean isEqualCore(Coordinate other, double tolerance) {
-        return isEqualCore(other.asCartesianCoordinate(), tolerance);
     }
 
     private boolean isEqualCore(CartesianCoordinate other, double tolerance) {

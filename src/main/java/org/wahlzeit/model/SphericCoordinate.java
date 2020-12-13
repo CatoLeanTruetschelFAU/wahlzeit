@@ -119,14 +119,6 @@ public final class SphericCoordinate extends AbstractCoordinate {
         return Math.acos(productSinTheta + productCosThea * cosAbsPhiDiff);
     }
 
-    @Override
-    public boolean isEqual(Coordinate coordinate) {
-
-        // Forward call to cartesian coordinate as our normalized coordinate system to ensure
-        // the commutative of equality.
-        return asCartesianCoordinate().isEqual(coordinate);
-    }
-
     public String asString() {
         return INVARIANT_FORMAT.format(fPhi) + " " + INVARIANT_FORMAT.format(fTheta) + " " + INVARIANT_FORMAT.format(fRadius);
     }

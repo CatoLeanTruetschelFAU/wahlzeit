@@ -6,7 +6,26 @@ public abstract class AbstractCoordinate implements Coordinate {
     public abstract CartesianCoordinate asCartesianCoordinate();
     public abstract SphericCoordinate asSphericCoordinate();
 
-    public abstract boolean isEqual(Coordinate coordinate);
+    @Override
+    public boolean isEqual(Coordinate coordinate) {
+        // Assert post-conditions and invariants
+        if(coordinate == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
+
+        boolean result = isEqualCore(coordinate);
+
+        // Assert post-conditions and invariants
+        // -
+
+        return result;
+    }
+
+    private boolean isEqualCore(Coordinate coordinate) {
+
+        // Forward call to cartesian coordinate as our normalized coordinate system to ensure
+        // the commutative of equality.
+        return asCartesianCoordinate().isEqual(coordinate.asCartesianCoordinate());
+    }
 
     @Override
     public final boolean equals(Object other) {
