@@ -1,10 +1,8 @@
 package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
 
 public final class Location {
     private static final CartesianCoordinate DEFAULT_COORDINATE = new CartesianCoordinate();
@@ -81,7 +79,7 @@ public final class Location {
             cls = Class.forName(discriminator);
         } catch (ClassNotFoundException e) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
-            throw null;
+            throw null; // To make the compiler happy
         }
 
         return cls;
@@ -94,7 +92,7 @@ public final class Location {
             ctor = clazz.getConstructor(COORDINATE_CTOR_PARAMS_LIST);
         } catch (NoSuchMethodException e) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
-            throw null;
+            throw null;  // To make the compiler happy
         }
 
         return ctor;
@@ -109,7 +107,7 @@ public final class Location {
             coordinate = (Coordinate) ctor.newInstance(coordinateStringRepresentation);
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
-            throw null;
+            throw null;  // To make the compiler happy
         }
 
         return coordinate;

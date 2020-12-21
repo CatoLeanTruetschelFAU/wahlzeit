@@ -97,7 +97,7 @@ public final class SphericCoordinate extends AbstractCoordinate {
     }
 
     public double getCentralAngle(SphericCoordinate coordinate) throws IllegalArgumentException {
-        // Assert post-conditions and invariants
+        // Assert pre-conditions and invariants
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
         assertInvariants();
@@ -130,7 +130,7 @@ public final class SphericCoordinate extends AbstractCoordinate {
 
     @Override
     public CartesianCoordinate asCartesianCoordinate() {
-        // Assert post-conditions and invariants
+        // Assert pre-conditions and invariants
         assertInvariants();
 
         CartesianCoordinate result = asCartesianCoordinateCore();

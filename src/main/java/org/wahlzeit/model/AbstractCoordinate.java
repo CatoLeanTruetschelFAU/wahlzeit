@@ -8,7 +8,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 
     @Override
     public boolean isEqual(Coordinate coordinate) {
-        // Assert post-conditions and invariants
+        // Assert pre-conditions and invariants
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
 
@@ -38,7 +38,7 @@ public abstract class AbstractCoordinate implements Coordinate {
     }
 
     public double getCartesianDistance(Coordinate coordinate) throws IllegalArgumentException {
-        // Assert post-conditions and invariants
+        // Assert pre-conditions and invariants
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
 
@@ -55,7 +55,7 @@ public abstract class AbstractCoordinate implements Coordinate {
     }
 
     public double getCentralAngle(Coordinate coordinate) throws IllegalArgumentException {
-        // Assert post-conditions and invariants
+        // Assert pre-conditions and invariants
         if(coordinate == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("coordinate");
 

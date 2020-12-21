@@ -178,7 +178,19 @@ public class Photo extends DataObject {
 		}
 		else
 		{
-			location = Location.parse(locationStr);
+			try {
+				location = Location.parse(locationStr);
+			} catch(IllegalArgumentException exc) {
+
+				// Database state is corrupt.
+				SysLog.log(new StringBuffer(
+						"Unable to reconstruct photo object with id "
+						+ id.toString()
+						+ "from database, as location cannot be parsed: "
+						+ exc.getMessage()));
+
+				location = null;
+			}
 		}
 	}
 	
