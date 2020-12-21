@@ -120,6 +120,9 @@ public class Photo extends DataObject {
 	 * @methodtype constructor
 	 */
 	public Photo(PhotoId myId) {
+		if(myId == null)
+			ExceptionHelper.ThrowNullArgumentExceptionMessage("myId");
+
 		id = myId;
 		
 		incWriteCount();
@@ -130,6 +133,8 @@ public class Photo extends DataObject {
 	 * @methodtype constructor
 	 */
 	public Photo(ResultSet rset) throws SQLException {
+		if(rset == null)
+			ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
 
 		// Calling a virtual method in a constructor...Seriously
 		readFrom(rset);
@@ -147,6 +152,9 @@ public class Photo extends DataObject {
 	 * 
 	 */
 	public void readFrom(ResultSet rset) throws SQLException {
+		if(rset == null)
+			ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
+
 		id = PhotoId.getIdFromInt(rset.getInt("id"));
 
 		ownerId = rset.getInt("owner_id");
@@ -198,6 +206,9 @@ public class Photo extends DataObject {
 	 * 
 	 */
 	public void writeOn(ResultSet rset) throws SQLException {
+		if(rset == null)
+			ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
+
 		rset.updateInt("id", id.asInt());
 		rset.updateInt("owner_id", ownerId);
 		rset.updateString("owner_name", ownerName);

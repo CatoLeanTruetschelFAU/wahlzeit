@@ -6,17 +6,20 @@ import java.sql.SQLException;
 public final class RestaurantPhotoFactory extends PhotoFactory {
 
     @Override
-    public Photo createPhoto() {
+    public RestaurantPhoto createPhoto() {
         return new RestaurantPhoto();
     }
 
     @Override
-    public Photo createPhoto(PhotoId id) {
+    public RestaurantPhoto createPhoto(PhotoId id) {
+        // id may be null, if so, the RestaurantPhoto ctor throws. Just escalate this as is to the caller.
         return new RestaurantPhoto(id);
     }
 
     @Override
-    public Photo createPhoto(ResultSet rs) throws SQLException {
+    public RestaurantPhoto createPhoto(ResultSet rs) throws SQLException {
+        // rset may be null, or it may be the case that the photo cannot be loaded from it.
+        // If so, the RestaurantPhoto ctor throws. Just escalate this as is to the caller.
         return new RestaurantPhoto(rs);
     }
 

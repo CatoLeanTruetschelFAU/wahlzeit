@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import org.wahlzeit.utils.ExceptionHelper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,7 +13,7 @@ public final class RestaurantPhoto extends Photo {
     }
 
     public RestaurantPhoto(PhotoId myId) {
-        super(myId);
+        super(myId); // Base class ctor already checks myId for null
         _restaurant = new Restaurant();
     }
 
@@ -25,15 +27,19 @@ public final class RestaurantPhoto extends Photo {
 
     @Override
     public void readFrom(ResultSet rset) throws SQLException {
-        super.readFrom(rset);
+        if(rset == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
 
+        super.readFrom(rset);
         _restaurant.readFrom(rset);
     }
 
     @Override
     public void writeOn(ResultSet rset) throws SQLException {
-        super.writeOn(rset);
+        if(rset == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
 
+        super.writeOn(rset);
         _restaurant.writeOn(rset);
     }
 

@@ -87,6 +87,9 @@ public final class Restaurant{
     // Persistence stuff, mainly copied here... Why don't we use a document database or an ORM if we already use a
     // crappy language like JAVA :(
     public void readFrom(ResultSet rset) throws SQLException {
+        if(rset == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
+
         _name = rset.getString("restaurant_name");
         _offeredFoodType = FoodType.create(rset.getString("restaurant_offered_food_type"));
         _offersVegetarianFood = rset.getBoolean("restaurant_offers_vegetarian_food");
@@ -95,6 +98,9 @@ public final class Restaurant{
     }
 
     public void writeOn(ResultSet rset) throws SQLException {
+        if(rset == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
+
         rset.updateString("restaurant_name", _name);
         rset.updateString("restaurant_offered_food_type", _offeredFoodType.asString());
         rset.updateBoolean("restaurant_offers_vegetarian_food", _offersVegetarianFood);
