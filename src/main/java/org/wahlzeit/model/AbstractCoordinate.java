@@ -29,6 +29,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 
     @Override
     public final boolean equals(Object other) {
+        // This handles the case that other is a null object reference
         return other instanceof Coordinate && asCartesianCoordinate().isEqual((Coordinate)other);
     }
 

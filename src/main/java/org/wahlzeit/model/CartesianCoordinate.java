@@ -4,61 +4,69 @@ import org.wahlzeit.utils.ExceptionHelper;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public final class CartesianCoordinate extends AbstractCoordinate {
 
-    public static final CartesianCoordinate ORIGIN = new CartesianCoordinate();
+    public static final CartesianCoordinate ORIGIN = new CartesianCoordinate(0,0,0);
 
-    private double fX;
-    private double fY;
-    private double fZ;
+    private final double fX;
+    private final double fY;
+    private final double fZ;
 
     private static final NumberFormat INVARIANT_FORMAT = NumberFormat.getInstance(Locale.US);
+    private static final Map<CartesianCoordinate, CartesianCoordinate> _values = new HashMap<>();
 
-    public CartesianCoordinate() {
-        this(0,0,0);
-
-        assertInvariants();
-    }
-
-    public CartesianCoordinate(double x, double y, double z) {
+    public static CartesianCoordinate fromValues(double x, double y, double z) {
         checkValues(x,y, z);
-        init(x, y, z);
-
-        assertInvariants();
+        return uncheckedFromValues(x,y,z);
     }
 
-    public CartesianCoordinate(String value)
-    {
+    public static CartesianCoordinate parse(String value) {
         if(value == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
 
         String[] components = value.split(" ");
 
         if(components.length == 0)
-            return;
+            return ORIGIN;
 
         if(components.length != 3)
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
 
+        double x, y, z;
+
         try {
-            fX = INVARIANT_FORMAT.parse(components[0]).doubleValue();
-            fY = INVARIANT_FORMAT.parse(components[1]).doubleValue();
-            fZ = INVARIANT_FORMAT.parse(components[2]).doubleValue();
+            x = INVARIANT_FORMAT.parse(components[0]).doubleValue();
+            y = INVARIANT_FORMAT.parse(components[1]).doubleValue();
+            z = INVARIANT_FORMAT.parse(components[2]).doubleValue();
         } catch(ParseException exc) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
+            throw null; // Shut up the compiler.
         }
 
-        assertInvariants();
+        return uncheckedFromValues(x, y, z);
     }
 
-    private void init(double x, double y, double z)
-    {
+    private static CartesianCoordinate uncheckedFromValues(double x, double y, double z) {
+        CartesianCoordinate result = new CartesianCoordinate(x, y, z);
+
+        synchronized (_values) {
+            CartesianCoordinate previous = _values.putIfAbsent(result, result);
+
+            if(previous != null) {
+                result = previous;
+            }
+        }
+
+        return result;
+    }
+
+    private CartesianCoordinate(double x, double y, double z) {
         fX = x;
         fY = y;
         fZ = z;
+        assertInvariants();
     }
 
     private static void checkValues(double x, double y, double z) throws IllegalArgumentException {
@@ -191,7 +199,7 @@ public final class CartesianCoordinate extends AbstractCoordinate {
         double theta = Math.acos(fZ / (radius + EPSILON));
         double phi = Math.signum(fX) * Math.atan(fY / (Math.abs(fX) + EPSILON));
 
-        return new SphericCoordinate(phi, theta, radius);
+        return SphericCoordinate.fromValues(phi, theta, radius);
     }
 }
 

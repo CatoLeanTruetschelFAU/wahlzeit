@@ -16,7 +16,7 @@ public final class LocationTest {
 
         // Assert
         Assert.assertTrue(subject.isDefault());
-        Assert.assertEquals(new CartesianCoordinate(), subject.getCoordinate().asCartesianCoordinate());
+        Assert.assertEquals(CartesianCoordinate.ORIGIN, subject.getCoordinate().asCartesianCoordinate());
     }
 
     @Test
@@ -27,12 +27,12 @@ public final class LocationTest {
         double expectedZ = 234.567;
 
         // Act
-        Location subject = new Location(new CartesianCoordinate(expectedX, expectedY, expectedZ));
+        Location subject = new Location(CartesianCoordinate.fromValues(expectedX, expectedY, expectedZ));
 
         // Assert
         Assert.assertFalse(subject.isDefault());
         Assert.assertEquals(
-                new CartesianCoordinate(expectedX, expectedY, expectedZ),
+                CartesianCoordinate.fromValues(expectedX, expectedY, expectedZ),
                 subject.getCoordinate().asCartesianCoordinate());
     }
 }

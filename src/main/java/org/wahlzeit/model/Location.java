@@ -1,11 +1,11 @@
 package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public final class Location {
-    private static final CartesianCoordinate DEFAULT_COORDINATE = new CartesianCoordinate();
+    private static final CartesianCoordinate DEFAULT_COORDINATE = CartesianCoordinate.ORIGIN;
 
     private Coordinate fCoordinate;
 
@@ -65,7 +65,7 @@ public final class Location {
         String discriminator = components[0];
         String coordinateStringRepresentation = components[1];
         Class<?> clazz = getClassFromDiscriminator(discriminator);
-        Constructor<?> ctor = getCtorFromClass(clazz);
+        Method ctor = getCtorFromClass(clazz);
 
         Coordinate coordinate = instantiate(ctor, coordinateStringRepresentation);
 
@@ -85,11 +85,11 @@ public final class Location {
         return cls;
     }
 
-    private static Constructor<?> getCtorFromClass(Class<?> clazz) throws IllegalArgumentException {
-        Constructor<?> ctor;
+    private static Method getCtorFromClass(Class<?> clazz) throws IllegalArgumentException {
+        Method ctor;
 
         try {
-            ctor = clazz.getConstructor(COORDINATE_CTOR_PARAMS_LIST);
+            ctor = clazz.getMethod("parse", COORDINATE_CTOR_PARAMS_LIST);
         } catch (NoSuchMethodException e) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
             throw null;  // To make the compiler happy
@@ -98,14 +98,14 @@ public final class Location {
         return ctor;
     }
 
-    private static Coordinate instantiate(Constructor<?> ctor, String coordinateStringRepresentation)
+    private static Coordinate instantiate(Method ctor, String coordinateStringRepresentation)
         throws IllegalArgumentException
     {
         Coordinate coordinate;
 
         try {
-            coordinate = (Coordinate) ctor.newInstance(coordinateStringRepresentation);
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            coordinate = (Coordinate) ctor.invoke(null, coordinateStringRepresentation);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
             throw null;  // To make the compiler happy
         }

@@ -2,48 +2,69 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.utils.ExceptionHelper;
 
-import java.nio.DoubleBuffer;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public final class SphericCoordinate extends AbstractCoordinate {
 
     public static final SphericCoordinate ORIGIN = new SphericCoordinate(0,0,0);
 
-    private double fPhi; // = Longitude e [0; 2PI]
-    private double fTheta; // = Latitude e [0; PI]
-    private double fRadius; // = Elevation >= 0
+    private final double fPhi; // = Longitude e [0; 2PI]
+    private final double fTheta; // = Latitude e [0; PI]
+    private final double fRadius; // = Elevation >= 0
 
     private static final NumberFormat INVARIANT_FORMAT = NumberFormat.getInstance(Locale.US);
+    private static final Map<SphericCoordinate, SphericCoordinate> _values = new HashMap<>();
 
-    public SphericCoordinate(String value)
-    {
+    public static SphericCoordinate fromValues(double phi, double theta, double radius) {
+        checkValues(phi, theta, radius);
+        return uncheckedFromValues(phi, theta, radius);
+    }
+
+    public static SphericCoordinate parse(String value) {
         if(value == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("value");
 
         String[] components = value.split(" ");
 
         if(components.length == 0)
-            return;
+            return ORIGIN;
 
         if(components.length != 3)
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value");
 
+        double phi, theta, radius;
+
         try {
-            fPhi = INVARIANT_FORMAT.parse(components[0]).doubleValue();
-            fTheta = INVARIANT_FORMAT.parse(components[1]).doubleValue();
-            fRadius = INVARIANT_FORMAT.parse(components[2]).doubleValue();
+            phi = INVARIANT_FORMAT.parse(components[0]).doubleValue();
+            theta = INVARIANT_FORMAT.parse(components[1]).doubleValue();
+            radius = INVARIANT_FORMAT.parse(components[2]).doubleValue();
         } catch(ParseException exc) {
             ExceptionHelper.ThrowIllegalArgumentExceptionMessage("value", exc);
+            throw null; // Make the compiler happy
         }
 
-        assertInvariants();
+        return uncheckedFromValues(phi, theta, radius);
     }
 
-    public SphericCoordinate(double phi, double theta, double radius) throws IllegalArgumentException {
-        checkValues(phi,theta, radius);
+    private static SphericCoordinate uncheckedFromValues(double phi, double theta, double radius) {
+        SphericCoordinate result = new SphericCoordinate(phi, theta, radius);
 
+        synchronized (_values) {
+            SphericCoordinate previous = _values.putIfAbsent(result, result);
+
+            if(previous != null) {
+                result = previous;
+            }
+        }
+
+        return result;
+    }
+
+    private SphericCoordinate(double phi, double theta, double radius) throws IllegalArgumentException {
         fPhi = phi;
         fTheta = theta;
         fRadius = radius;
@@ -150,7 +171,7 @@ public final class SphericCoordinate extends AbstractCoordinate {
         double y = fRadius * sinTheta * Math.sin(fPhi);
         double z = fRadius * Math.cos(fTheta);
 
-        return new CartesianCoordinate(x, y, z);
+        return CartesianCoordinate.fromValues(x, y, z);
     }
 }
 

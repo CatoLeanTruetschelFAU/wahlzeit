@@ -25,7 +25,8 @@ public abstract class PhotoSpecification {
     protected static final int EXPECTED_PRAISE_SUM = 10;
     protected static final int EXPECTED_NO_VOTES = 5;
     protected static final long EXPECTED_CREATION_TIME = 400;
-    protected static final String EXPECTED_LOCATION = new Location(new CartesianCoordinate(1, 2, 3)).asString();
+    protected static final String EXPECTED_LOCATION
+            = new Location(CartesianCoordinate.fromValues(1, 2, 3)).asString();
 
 
     protected abstract Photo init();

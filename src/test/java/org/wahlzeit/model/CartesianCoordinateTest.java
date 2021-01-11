@@ -15,7 +15,7 @@ public class CartesianCoordinateTest {
         double z = -1.445;
 
         // Act
-        CartesianCoordinate coordinate = new CartesianCoordinate(x, y, z);
+        CartesianCoordinate coordinate = CartesianCoordinate.fromValues(x, y, z);
 
         // Assert
         Assert.assertEquals(x, coordinate.getX(), DEFAULT_TOLERANCE);
@@ -26,7 +26,7 @@ public class CartesianCoordinateTest {
     @Test
     public void testIsEqualSameInstance(){
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate();
+        CartesianCoordinate subject = CartesianCoordinate.ORIGIN;
         CartesianCoordinate comparator = subject;
 
         // Act
@@ -39,8 +39,8 @@ public class CartesianCoordinateTest {
     @Test
     public void testIsEqualExact(){
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate();
-        CartesianCoordinate comparator = new CartesianCoordinate();
+        CartesianCoordinate subject = CartesianCoordinate.ORIGIN;
+        CartesianCoordinate comparator = CartesianCoordinate.ORIGIN;
 
         // Act
         boolean areEqual = subject.isEqual(comparator);
@@ -52,8 +52,8 @@ public class CartesianCoordinateTest {
     @Test
     public void testIsEqualWithTolerance(){
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate();
-        CartesianCoordinate comparator = new CartesianCoordinate(EPSILON, EPSILON, EPSILON);
+        CartesianCoordinate subject = CartesianCoordinate.ORIGIN;
+        CartesianCoordinate comparator = CartesianCoordinate.fromValues(EPSILON, EPSILON, EPSILON);
 
         // Act
         boolean areEqual = subject.isEqual(comparator);
@@ -65,8 +65,8 @@ public class CartesianCoordinateTest {
     @Test
     public void testNotIsEqual(){
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate();
-        CartesianCoordinate comparator = new CartesianCoordinate(1, 1, 1);
+        CartesianCoordinate subject = CartesianCoordinate.ORIGIN;
+        CartesianCoordinate comparator = CartesianCoordinate.fromValues(1, 1, 1);
 
         // Act
         boolean areEqual = subject.isEqual(comparator);
@@ -78,7 +78,7 @@ public class CartesianCoordinateTest {
     @Test
     public void testGetDistanceSameInstance() {
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate();
+        CartesianCoordinate subject = CartesianCoordinate.ORIGIN;
         CartesianCoordinate other = subject;
 
         // Act
@@ -91,8 +91,8 @@ public class CartesianCoordinateTest {
     @Test
     public void testGetDistance() {
         // Arrange
-        CartesianCoordinate subject = new CartesianCoordinate(-1, -1, -1);
-        CartesianCoordinate other = new CartesianCoordinate(1, 1, 1);
+        CartesianCoordinate subject = CartesianCoordinate.fromValues(-1, -1, -1);
+        CartesianCoordinate other = CartesianCoordinate.fromValues(1, 1, 1);
         double expectedDistance = 3.4641016151377545870548926830117; // sqrt(2^2 * 3) = sqrt(12)
 
         // Act
@@ -105,7 +105,7 @@ public class CartesianCoordinateTest {
     @Test
     public void testSpericRoundtrip() {
         // Arrange
-        CartesianCoordinate expected = new CartesianCoordinate(1, 1, 1);
+        CartesianCoordinate expected = CartesianCoordinate.fromValues(1, 1, 1);
 
         // Act
         CartesianCoordinate coordinate = expected.asSphericCoordinate().asCartesianCoordinate();
@@ -117,7 +117,7 @@ public class CartesianCoordinateTest {
     @Test
     public void testSpericEqualsOriginal() {
         // Arrange
-        CartesianCoordinate expected = new CartesianCoordinate(1, 1, 1);
+        CartesianCoordinate expected = CartesianCoordinate.fromValues(1, 1, 1);
 
         // Act
         SphericCoordinate coordinate = expected.asSphericCoordinate();

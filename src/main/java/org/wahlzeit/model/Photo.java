@@ -105,7 +105,8 @@ public class Photo extends DataObject {
 	 */
 	protected long creationTime = System.currentTimeMillis();
 
-	protected Location location = new Location(new CartesianCoordinate(Math.random(), Math.random(), Math.random()));
+	protected Location location = new Location(
+			CartesianCoordinate.fromValues(Math.random(), Math.random(), Math.random()));
 
 	/**
 	 * 
