@@ -29,6 +29,20 @@ import org.wahlzeit.utils.*;
 /**
  * A photo represents a user-provided (uploaded) photo.
  */
+@PatternInstance(
+		patternName = "Entity",
+		participants = {
+			"Photo", "PhotoId"
+		},
+		patternDescription="https://martinfowler.com/bliki/EvansClassification.html"
+)
+@PatternInstance(
+		patternName = "Aggregate",
+		participants = {
+				"Photo", "PhotoId", "EmailAddress", "Language", "PhotoSize", "Tags", "PhotoStatus", "Location"
+		},
+		patternDescription="https://martinfowler.com/bliki/EvansClassification.html"
+)
 public class Photo extends DataObject {
 
 	/**
@@ -61,6 +75,7 @@ public class Photo extends DataObject {
 	/**
 	 * 
 	 */
+	@PatternInstance(patternName = "Identity field", patternDescription = "https://martinfowler.com/eaaCatalog/identityField.html")
 	protected PhotoId id = null;
 	
 	/**
