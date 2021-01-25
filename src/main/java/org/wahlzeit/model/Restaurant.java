@@ -4,17 +4,25 @@ import org.wahlzeit.utils.ExceptionHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class Restaurant{
-    private String _name;
+public final class Restaurant {
     private FoodType _offeredFoodType;
     private boolean _offersVegetarianFood;
+    private String _name;
+    private RestaurantType _type;
 
-    public Restaurant()
-    {
-        this("NoNameRestaurant", FoodType.NO_FOOD, false);
+    public RestaurantType getRestaurantType() {
+        return _type;
     }
 
-    public Restaurant(String name, FoodType offeredFoodType, boolean offersVegetarianFood) {
+    public Restaurant(RestaurantType type)
+    {
+        this(type, "NoNameRestaurant", FoodType.NO_FOOD, false);
+    }
+
+    public Restaurant(RestaurantType type, String name, FoodType offeredFoodType, boolean offersVegetarianFood) {
+        if(type == null)
+            ExceptionHelper.ThrowNullArgumentExceptionMessage("type");
+
         if(name == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("name");
 
@@ -24,6 +32,7 @@ public final class Restaurant{
         if(offeredFoodType == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("offeredFoodType");
 
+        _type = type;
         _name = name;
         _offeredFoodType = offeredFoodType;
         _offersVegetarianFood = offersVegetarianFood;
@@ -90,6 +99,7 @@ public final class Restaurant{
         if(rset == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
 
+        _type = RestaurantType.get(rset.getString("restaurant_type"));
         _name = rset.getString("restaurant_name");
         _offeredFoodType = FoodType.create(rset.getString("restaurant_offered_food_type"));
         _offersVegetarianFood = rset.getBoolean("restaurant_offers_vegetarian_food");
@@ -101,6 +111,7 @@ public final class Restaurant{
         if(rset == null)
             ExceptionHelper.ThrowNullArgumentExceptionMessage("rset");
 
+        rset.updateString("restaurant_type", _type.toString());
         rset.updateString("restaurant_name", _name);
         rset.updateString("restaurant_offered_food_type", _offeredFoodType.asString());
         rset.updateBoolean("restaurant_offers_vegetarian_food", _offersVegetarianFood);

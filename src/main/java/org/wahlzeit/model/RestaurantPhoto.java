@@ -6,15 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class RestaurantPhoto extends Photo {
-    private Restaurant _restaurant;
+    private final Restaurant _restaurant;
 
     public RestaurantPhoto() {
-        _restaurant = new Restaurant();
+        _restaurant = new Restaurant(RestaurantType.getRoot("Restaurant"));
     }
 
     public RestaurantPhoto(PhotoId myId) {
         super(myId); // Base class ctor already checks myId for null
-        _restaurant = new Restaurant();
+        _restaurant = new Restaurant(RestaurantType.getRoot("Restaurant"));
     }
 
     public RestaurantPhoto(ResultSet rset) throws SQLException {
