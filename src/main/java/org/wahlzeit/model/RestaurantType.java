@@ -4,6 +4,11 @@ import org.wahlzeit.utils.ExceptionHelper;
 import java.util.HashMap;
 import java.util.Map;
 
+/* Object creation trajectory (static type -> dynamic type) continued from Restaurant:
+ * Restaurant.readFrom(ResultSet)
+ * RestaurantType.get(String)
+ * RestaurantType.ctor(String, RestaurantType)
+ */
 public final class RestaurantType {
     private static final Map<String, RestaurantType> _lookup = new HashMap<>();
     private static final Object _syncRoot = new Object();

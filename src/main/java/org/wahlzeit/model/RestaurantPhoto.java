@@ -5,6 +5,20 @@ import org.wahlzeit.utils.ExceptionHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+/* Object creation trajectory (static type -> dynamic type):
+ * PhotoManager.createObject(ResultSet) -> RestaurantPhotoManager.createObject(ResultSet)
+ * PhotoFactory.createPhoto(ResultSet) -> RestaurantPhotoFactory.createPhoto(ResultSet)
+ * RestaurantPhoto.ctor(ResultSet)
+ * RestaurantPhoto.ctor()
+ * Photo.ctor()
+ * RestaurantType.getRoot(String)
+ * Restaurant.ctor(RestaurantType)
+ * RestaurantPhoto.readFrom(ResultSet)
+ * Photo.readFrom(ResultSet)
+ * Location.parse(String)
+ * Restaurant.readFrom(ResultSet)
+ */
 public final class RestaurantPhoto extends Photo {
     private final Restaurant _restaurant;
 

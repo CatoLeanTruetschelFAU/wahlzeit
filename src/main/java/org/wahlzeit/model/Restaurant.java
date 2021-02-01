@@ -4,6 +4,15 @@ import org.wahlzeit.utils.ExceptionHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+/* Object creation trajectory (static type -> dynamic type) continued from RestaurantPhoto:
+ * RestaurantPhoto.ctor()
+ * RestaurantType.getRoot(String)
+ * Restaurant.ctor(RestaurantType)
+ * RestaurantPhoto.readFrom(ResultSet)
+ * Restaurant.readFrom(ResultSet)
+ * RestaurantType.get(String)
+ */
 public final class Restaurant {
     private FoodType _offeredFoodType;
     private boolean _offersVegetarianFood;
