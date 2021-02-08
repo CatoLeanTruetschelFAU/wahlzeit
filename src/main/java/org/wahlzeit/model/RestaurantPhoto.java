@@ -18,6 +18,12 @@ import java.sql.SQLException;
  * Photo.readFrom(ResultSet)
  * Location.parse(String)
  * Restaurant.readFrom(ResultSet)
+ *
+ * The RestaurantPhoto class takes part in the "restaurant domain" collaboration between Restaurant and RestaurantPhoto
+ * and binds the client role.
+ *
+ * The RestaurantPhoto class takes part in the "factory" collaboration between RestaurantPhotoFactory and RestaurantPhoto
+ * and binds the product role.
  */
 public final class RestaurantPhoto extends Photo {
     private final Restaurant _restaurant;

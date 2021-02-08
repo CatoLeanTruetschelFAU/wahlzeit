@@ -8,6 +8,9 @@ import java.util.Map;
  * Restaurant.readFrom(ResultSet)
  * RestaurantType.get(String)
  * RestaurantType.ctor(String, RestaurantType)
+ *
+ * The RestaurantType class takes part in the "type-object" collaboration between Restaurant and RestaurantType
+ * and binds the type-object role.
  */
 public final class RestaurantType {
     private static final Map<String, RestaurantType> _lookup = new HashMap<>();

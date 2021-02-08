@@ -12,6 +12,12 @@ import java.sql.SQLException;
  * RestaurantPhoto.readFrom(ResultSet)
  * Restaurant.readFrom(ResultSet)
  * RestaurantType.get(String)
+ *
+ * The Restaurant class takes part in the "type-object" collaboration between Restaurant and RestaurantType
+ * and binds the base-object role.
+ *
+ * The Restaurant class takes part in the "restaurant domain" collaboration between Restaurant and RestaurantPhoto
+ * and binds the service role.
  */
 public final class Restaurant {
     private FoodType _offeredFoodType;

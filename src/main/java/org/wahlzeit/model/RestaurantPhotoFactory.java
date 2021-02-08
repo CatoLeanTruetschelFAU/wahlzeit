@@ -3,6 +3,10 @@ package org.wahlzeit.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/*
+ * The RestaurantPhotoFactory class takes part in the "factory" collaboration between RestaurantPhotoFactory and RestaurantPhoto
+ * and binds the factory role.
+ */
 public final class RestaurantPhotoFactory extends PhotoFactory {
 
     @Override
